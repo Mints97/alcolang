@@ -8,7 +8,11 @@ Alcolang is not practical - it is experimental. It is not smart - it is ridiculo
 
 This language has been designed to achieve the most with the smallest amount of syntactical constructs. Thanks to that, the core of the language is just a few lines of Haskell with a simple Parsec parser, while most of the actual code resides in the standard library, constantly under construction. This made the language easy to potentially extend! This also resulted in an overly-simplistic system, where the lines between code, data and text are blurred extremely thin. Is this a good thing or a bad thing? I don't know, I'm drunk!
 
-## Language spec:
+## Using Alcolang:
+
+I am currently working on a Haskell implementation of the interpreter in this repo.
+
+## Language Spec:
 
 Alcolang is an intrinsically-interpreted, pure, reactive, strongly and dynamically-typed, lazy, pattern-matching language. It is effectively multi-paradigm, since it allows for object-oriented, functional (and even imperative, coming soon to the standard library) code to be written.
 
@@ -56,7 +60,9 @@ The stack is also needed for prototyping, as described above.
 
 And now we get to the most important idea: a pattern match only happens if there is an unbound value in the pattern. The pattern itself binding the value doesn't count (e.g. in the pattern A = B, A is not considered to be bound). Essentially, we only pattern-match while we have unknowns to find, "wires" to connect.
 
-Note: the elements of any pattern, including a binding, constitute a single scope; so in A (A = x) and in A = (A = x), if the former is matched by A *, and the latter by A = *, x will get propagated to A either way. This also implies that, when we are matching a binding A = ? to some pattern, that binding is not considered to exist inside the pattern.
+Note: the elements of any pattern, including a binding, constitute a single scope; so in A (A = x) and in A = (A = x), if the former is matched by A \*, and the latter by A = \*, x will get propagated to A either way. This also implies that, when we are matching a binding A = ? to some pattern, that binding is not considered to exist inside the pattern.
+
+An important idea is that pattern matching is repeated for patterns created inside a pattern instance, until all values have been propagated, and there is no un-bound alco anywhere inside the pattern instance.
 
 ## Standard Library:
 
@@ -130,9 +136,8 @@ and an infinite number of {builtin: match-any}.
 ### Graphs:
 
 ```
-(main = trace (dfs root (Node 3)))
+(main = trace (dfs a (Node 3)))
 
-(root = a)
 (a = b = c = d)
     (b = c)
         (c = d)
@@ -143,9 +148,9 @@ and an infinite number of {builtin: match-any}.
 (d (Node 4))
 
 (# for this pattern to be matched, a DFS has to be performed from root to find (root val))
-(node = dfs root val where (root val) (node = root))
+(node = dfs node val where (node val))
 ```
-
+Note: the above can also be seen as an example of simple logic programming.
 
 ## Future Work:
 
