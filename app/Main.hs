@@ -1,6 +1,6 @@
 module Main where
 
-import Lib
+import Parser.Parser
 
 main :: IO ()
-main = someFunc
+main = print $ parseString "(param1 = int) (param2 = string) (+ param1 (* 2 param2)) "
