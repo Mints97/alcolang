@@ -69,37 +69,37 @@ An important idea is that pattern matching is repeated for patterns created insi
 When an alco program from a file is loaded, the runtime provides a "framework", where an array of builtins is contained in a virtual alco along the actual alco that the file represents. This way, any search when resolving a pattern will eventually end there.
 
 ```
-(# builtins are not actually accessible from regular code. {builting: end} occurs right past the end of any value being matched to a pattern.)
+(# (builtins are not actually accessible from regular code. {builting: end} occurs right past the end of any value being matched to a pattern.))
 ({builtin: end} = where)
 ({builtin: end} = ;)
 
 @ = nonpure = {builtin: match-any}
-(# nonpure will provide for sequencing non-pure computations via = in later revisions; the idea is to make it impossible for a non-pure computation in a pattern to be matched by a match-any, so that any value matching the pattern would have to be tainted with one of the non-pure patterns; this will be used to compute non-pure code correctly.)
+(# (nonpure will provide for sequencing non-pure computations via = in later revisions; the idea is to make it impossible for a non-pure computation in a pattern to be matched by a match-any, so that any value matching the pattern would have to be tainted with one of the non-pure patterns; this will be used to compute non-pure code correctly.))
 
 ({builtin: matched-by-any} = _)
 
 (# This is part of the module system. When an alco is to be exported from a file, it should be bound to export.)
 export
 
-(# This imports all exports of a file. After that, x will be bound to all exported alcos of filename.
+(# (This imports all exports of a file. After that, x will be bound to all exported alcos of filename.
    If any of them is used by name as (part of) a pattern (and that name does not occur in the surrounding lexical hierarchy),
-   it is thus guaranteed to be matched by x.)
+   it is thus guaranteed to be matched by x.))
 (x = import filename where (x = {builtin: open filename, interpret, bind x = export from the filename}))
 
 (x = a + b where (a = int) (b = int) (x = {builtin: a + b}) = {any integer computable by addition} = int)
-(# below are aliases)
+(# (below are aliases))
 (x = + int int = {any integer computable by addition} = int)
 (x = add int int = {any integer computable by addition} = int)
 
-(# Same for *, /, all regular Java operators for int, float and bool. Bitwise operators included.
-   There is one additional operator:)
+(# (Same for *, /, all regular Java operators for int, float and bool. Bitwise operators included.
+   There is one additional operator:))
 (x = a /% b c where (a = int) (b = int) (x = {builtin: a / b}) (c = {builtin: a % b}))
 (# Alias:)
 (x = divmod a b c)
 ((x c) = a /% b)
 ((x c) = divmod a b)
 
-(# Only form of I/O we have before non-pure computations are added: prints x as a side-effect upon being matched. If x is a thunk of expressions, it is evaluated.)
+(# (Only form of I/O we have before non-pure computations are added: prints x as a side-effect upon being matched. If x is a thunk of expressions, it is evaluated.))
 (trace x where (x = int) = {builtin: trace x})
 (trace x where (x = float) = {builtin: trace x})
 (trace x = {builtin: trace x}) (# that one is for strings)
@@ -147,7 +147,7 @@ and an infinite number of {builtin: match-any}.
 (c (Node 3))
 (d (Node 4))
 
-(# for this pattern to be matched, a DFS has to be performed from root to find (root val))
+(# (for this pattern to be matched, a DFS has to be performed from root to find (root val)))
 (node = dfs node val where (node val))
 ```
 Note: the above can also be seen as an example of simple logic programming.
